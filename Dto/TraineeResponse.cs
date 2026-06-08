@@ -8,5 +8,5 @@ public class TraineeResponse
     public required string LastName { get; set; }
     public required string Email { get; set; }
     public required string TechStack { get; set; }
-    public required string Status { get; set; }
+    public required Status Status { get; set; }
 }

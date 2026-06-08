@@ -13,35 +13,44 @@ public class TraineesController: ControllerBase
     }
     
     [HttpGet]
-    public ActionResult GetAllTrainees()
+    public ActionResult GetAllTrainees(string? search)
     {
-        // GET /api/trainees
-        List<Trainee> allTrainees = service.GetAllTrainees();
-        return Ok(allTrainees);
+        if(search == null)
+        {
+            // GET /api/trainees
+            Task<List<Trainee>> allTrainees = service.GetAllTrainees();
+            return Ok(allTrainees.Result);
+        }
+        var result = service.SearchTrainees(search);
+
+        return Ok(new
+        {
+            result.Result
+        });
     }
 
     [HttpGet("{id}")]
     public ActionResult GetTraineeById(int id)
     {
         // GET /api/trainees/{id}
-        Trainee? trainee = service.GetTraineeById(id);
+        Task<Trainee?> trainee = service.GetTraineeById(id);
         if(trainee == null)
         {
             return NotFound(new { message = "Trainee not found" });
         }
 
-        return Ok(trainee);
+        return Ok(trainee.Result);
     }   
 
     [HttpPost]
     public ActionResult CreateTrainee(CreateTraineeRequest trainee)
     {
         // POST /api/trainees
-        TraineeResponse traineeResponse = service.CreateTrainee(trainee);
+        Task<TraineeResponse> traineeResponse = service.CreateTrainee(trainee);
 
         return Ok( new
         {
-            newTrainee = traineeResponse
+            newTrainee = traineeResponse.Result
         });
     }
 
@@ -49,25 +58,37 @@ public class TraineesController: ControllerBase
     public ActionResult UpdateTraineeDetails(int id, UpdateTraineeRequest trainee)
     {
         // PUT /api/trainees/{id}
-        Trainee? updatedTraineeDetails = service.UpdateTraineeDetails(id, trainee);
+        Task<Trainee?> updatedTraineeDetails = service.UpdateTraineeDetails(id, trainee);
 
         if(updatedTraineeDetails == null)
         {
             return NotFound(new { message = "Invalid Trainee Id" });
         }
 
-        return Ok(updatedTraineeDetails);
+        return Ok(updatedTraineeDetails.Result);
     }
 
     [HttpDelete("{id}")]
     public ActionResult DeleteTrainee(int id)
     {
         // DELETE /api/trainees/{id}
-        bool isTraineeDeleted = service.DeleteTraineeDetails(id);
-        if (!isTraineeDeleted)
+        Task<bool> isTraineeDeleted = service.DeleteTraineeDetails(id);
+        if (isTraineeDeleted.Result == false)
         {
             return NotFound(new { message = "Invalid Trainee Data"});
         }
         return NoContent();
     }
+
+    // [HttpGet]
+    // public ActionResult SearchTrainees(string search)
+    // {
+    //     var result = service.SearchTrainees(search);
+
+    //     return Ok(new
+    //     {
+    //         result
+    //     });
+    // }
 }
+

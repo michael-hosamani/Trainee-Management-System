@@ -1,11 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 
-public enum Status
-{
-    Active,
-    Inactive
-}
-
 // Dto for validating inputs of creation of trainee request
 public class CreateTraineeRequest
 {
@@ -26,5 +20,5 @@ public class CreateTraineeRequest
     
     [Required(ErrorMessage = "Status is required")]
     [EnumDataType(typeof(Status), ErrorMessage = "Status must be valid")]
-    public required string Status { get; set; }
+    public required Status Status { get; set; }
 }

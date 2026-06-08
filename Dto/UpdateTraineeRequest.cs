@@ -15,5 +15,5 @@ public class UpdateTraineeRequest
     public string? TechStack { get; set; }
     
     [EnumDataType(typeof(Status), ErrorMessage = "Status must be valid")]
-    public string? Status { get; set; }
+    public Status? Status { get; set; }
 }

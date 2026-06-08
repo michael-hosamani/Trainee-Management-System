@@ -1,8 +1,17 @@
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+   .AddJsonOptions(options =>
+   {
+      options.JsonSerializerOptions.Converters.Add(
+         new JsonStringEnumConverter() 
+      );
+   });
 
 builder.Services.AddOpenApiDocument(config =>
 {
@@ -10,7 +19,14 @@ builder.Services.AddOpenApiDocument(config =>
    config.Title = "Training Management api"; 
 });
 
-builder.Services.AddSingleton<ITraineeService, TraineeService>();
+builder.Services.AddDbContext<AppDbContext>(
+   options => 
+   {
+      options.UseInMemoryDatabase("TraineeDb");
+   }
+);
+
+builder.Services.AddScoped<ITraineeService, TraineeService>();
 
 var app = builder.Build();
 

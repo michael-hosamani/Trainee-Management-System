@@ -1,9 +1,11 @@
 // Interface for TraineeService
 public interface ITraineeService
 {
-    List<Trainee> GetAllTrainees();
-    Trainee? GetTraineeById(int id);
-    TraineeResponse CreateTrainee(CreateTraineeRequest trainee);
-    Trainee? UpdateTraineeDetails(int id, UpdateTraineeRequest trainee);
-    bool DeleteTraineeDetails(int id);
+    Task<List<Trainee>> GetAllTrainees();
+    Task<Trainee?> GetTraineeById(int id);
+    Task<TraineeResponse> CreateTrainee(CreateTraineeRequest trainee);
+    Task<Trainee?> UpdateTraineeDetails(int id, UpdateTraineeRequest trainee);
+    Task<bool> DeleteTraineeDetails(int id);
+
+    Task<IQueryable<Trainee>> SearchTrainees(string search);
 }
