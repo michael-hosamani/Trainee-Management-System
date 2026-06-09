@@ -19,12 +19,10 @@ builder.Services.AddOpenApiDocument(config =>
    config.Title = "Training Management api"; 
 });
 
-builder.Services.AddDbContext<AppDbContext>(
-   options => 
-   {
-      options.UseInMemoryDatabase("TraineeDb");
-   }
-);
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+ 
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
 builder.Services.AddScoped<ITraineeService, TraineeService>();
 
