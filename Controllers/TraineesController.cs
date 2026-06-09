@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using PaginationFiltering.Models;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -14,12 +15,14 @@ public class TraineesController: ControllerBase
     
     // GET /api/trainees
     [HttpGet]
-    public ActionResult GetAllTrainees(string? search)
+    public ActionResult GetAllTrainees(string? search,[FromQuery] PaginationParams paginationParams)
     {
         if(search == null)
         {
-            Task<List<Trainee>> allTrainees = service.GetAllTrainees();
-            return Ok(allTrainees.Result);
+            // Task<List<Trainee>> allTrainees = service.GetAllTrainees();
+            // return Ok(allTrainees.Result);
+            Task<PagedResponse<Trainee>> traineeData = service.GetTraineeUsingPagination(paginationParams);
+            return Ok(traineeData.Result.Data);
         }
         var result = service.SearchTrainees(search);
 

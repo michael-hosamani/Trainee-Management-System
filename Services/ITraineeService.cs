@@ -1,4 +1,6 @@
 // Interface for TraineeService
+using PaginationFiltering.Models;
+
 public interface ITraineeService
 {
     Task<List<Trainee>> GetAllTrainees();
@@ -8,4 +10,5 @@ public interface ITraineeService
     Task<bool> DeleteTraineeDetails(int id);
 
     Task<IQueryable<Trainee>> SearchTrainees(string search);
+    Task<PagedResponse<Trainee>> GetTraineeUsingPagination(PaginationParams paginationParams);
 }

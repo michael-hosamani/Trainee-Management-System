@@ -1,7 +1,7 @@
 using System.Data.Common;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-// using TraineeManagementApi.Data;
+using PaginationFiltering.Models;
 
 public class TraineeService : ITraineeService
 {
@@ -132,5 +132,18 @@ public class TraineeService : ITraineeService
         // var searchResult = result
 
         return result;
+    }
+
+    public async Task<PagedResponse<Trainee>> GetTraineeUsingPagination(PaginationParams paginationParams)
+    {
+        var query = _db.Trainees.AsQueryable();
+        var totalRecords = await query.CountAsync();
+        var items = await query.Skip((paginationParams.PageNumber - 1) * paginationParams.PageSize)
+                                .Take(paginationParams.PageSize)
+                                .ToListAsync();
+
+        var pagedResponse = new PagedResponse<Trainee>(items, paginationParams.PageNumber, paginationParams.PageSize, totalRecords);
+
+        return pagedResponse;
     }
 }

@@ -4,11 +4,11 @@ using System.ComponentModel.DataAnnotations;
 public class CreateTraineeRequest
 {
     [Required(ErrorMessage = "First name is required")]
-    [StringLength(50, ErrorMessage = "First name should not exceed 50 charachters")]
+    [MaxLength(50, ErrorMessage = "First name should not exceed 50 charachters")]
     public required string FirstName { get; set; }
 
     [Required(ErrorMessage = "Last name is required")]
-    [StringLength(50, ErrorMessage = "Last name should not exceed 50 charachters")]
+    [MaxLength(50, ErrorMessage = "Last name should not exceed 50 charachters")]
     public required string LastName { get; set; }
 
     [Required(ErrorMessage = "Email is required")]
