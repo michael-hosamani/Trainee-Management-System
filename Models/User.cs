@@ -1,5 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 
-
+[Index(nameof(Username), IsUnique = true)]
 public class User
 {
     public int Id { get; set; }

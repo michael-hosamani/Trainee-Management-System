@@ -5,8 +5,6 @@ using TraineeManagementApi.Helpers;
 
 public class TraineeService : ITraineeService
 {
-    private static int Index = 0; // index to keep track of Ids of Trainees
-
     private readonly AppDbContext _db;
 
     public TraineeService(
@@ -39,11 +37,9 @@ public class TraineeService : ITraineeService
     // This funciton creates a new trainee and pushed it into the in-memory Trainee list
     public async Task<TraineeResponse> CreateTrainee(CreateTraineeRequest trainee)
     {
-        int traineeId = Index;
-        Index++;
+  
         Trainee newTrainee = new Trainee
         {
-            Id = Index,
             FirstName = trainee.FirstName,
             LastName = trainee.LastName,
             Email = trainee.Email,
@@ -57,8 +53,8 @@ public class TraineeService : ITraineeService
         await _db.SaveChangesAsync();
 
         TraineeResponse traineeResponse = new TraineeResponse
-        {
-            Id = Index,
+        {   
+            Id = newTrainee.Id,
             FirstName = newTrainee.FirstName,
             LastName = newTrainee.LastName,
             Email = newTrainee.Email,
