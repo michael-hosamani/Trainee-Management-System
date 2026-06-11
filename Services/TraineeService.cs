@@ -4,21 +4,14 @@ using Microsoft.EntityFrameworkCore;
 using TraineeManagementApi.Helpers;
 using Microsoft.AspNetCore.Identity;
 
-public class TraineeService : ITraineeService
+public class TraineeService(ILogger<TraineeService> logger, AppDbContext db) : ITraineeService
 {
-    private readonly AppDbContext _db;
-
-    public TraineeService(
-        AppDbContext db
-    )
-    {
-        _db = db;
-    }
+    private readonly AppDbContext _db = db;
+    private readonly ILogger<TraineeService> _logger = logger;
 
     // This function returns the list of all the Trainees
     public async Task<List<Trainee>> GetAllTrainees()
     {
-        
         return await _db.Trainees.ToListAsync();
     }
 
@@ -28,6 +21,7 @@ public class TraineeService : ITraineeService
         var result = await _db.Trainees.SingleOrDefaultAsync(t => t.Id == id);
         if(result != null)
         {
+            _logger.LogError("Trainee not found");
             return result;
         }
 
@@ -63,7 +57,7 @@ public class TraineeService : ITraineeService
             CreatedDate = newTrainee.CreatedDate,
             UpdatedDate = newTrainee.UpdatedDate
         };
-       
+        _logger.LogInformation("New Trainee created successfully");
         return traineeResponse;
     }
 
@@ -73,6 +67,7 @@ public class TraineeService : ITraineeService
         var findTrainee = await _db.Trainees.SingleOrDefaultAsync(t => t.Id == id);
         if(findTrainee == null)
         {
+            _logger.LogError("Trainee not found");
             return null;
         }
 
@@ -95,6 +90,8 @@ public class TraineeService : ITraineeService
 
         await _db.SaveChangesAsync();
 
+        _logger.LogInformation("Trainee updated successfully");
+
         return findTrainee;
     }
 
@@ -104,11 +101,14 @@ public class TraineeService : ITraineeService
         var trainee = await _db.Trainees.SingleOrDefaultAsync(t => t.Id == id);
         if(trainee == null)
         {
+            _logger.LogError("Trainee not found");
             return false;
         }
 
         _db.Trainees.Remove(trainee);
         await _db.SaveChangesAsync();
+
+        _logger.LogInformation("Trainee deletd successfully");
 
         return true;
     }
@@ -128,10 +128,10 @@ public class TraineeService : ITraineeService
         return result;
     }
 
+    // This function returns paginated response based on search and status query parameters
     public async Task<PagedResponse<Trainee>> GetTraineeUsingPagination(PaginationParams paginationParams, string? search, Status? status)
     { 
         IQueryable<Trainee> trainees = _db.Trainees.AsQueryable();
-    
         if(!string.IsNullOrWhiteSpace(search))
         {
             // search = search.ToLower();

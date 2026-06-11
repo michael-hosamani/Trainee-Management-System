@@ -93,6 +93,9 @@ builder.Services
 
 builder.Services.AddAuthorization();
 
+builder.Logging.AddConsole();     
+builder.Logging.AddDebug();
+
 var app = builder.Build();
 
 // This seeds the database by creating one user in the User table

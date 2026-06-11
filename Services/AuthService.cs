@@ -12,11 +12,13 @@ public class AuthService: IAuthService
 {
     private readonly AppDbContext _db;
     private readonly IConfiguration _configuration;
+    private readonly ILogger<AuthService> _logger;
 
-    public AuthService(AppDbContext db, IConfiguration configuration)
+    public AuthService(AppDbContext db, IConfiguration configuration, ILogger<AuthService> logger)
     {   
         _db = db;
         _configuration = configuration;
+        _logger = logger;
     }
 
     public LoginResponse? UserLogin(LoginRequest loginRequest)
@@ -25,6 +27,7 @@ public class AuthService: IAuthService
 
         if (user == null)
         {
+            _logger.LogError("User not found");
             return null;
         }
   
@@ -72,6 +75,8 @@ public class AuthService: IAuthService
             CreatedDate = user.CreatedDate,
             UpdatedDate = user.UpdatedDate  
         };
+
+        _logger.LogInformation("Logged In Successfully By user", user);
         return new LoginResponse
         {
             User = userWithoutPassword,
