@@ -62,9 +62,10 @@ public class AuthService: IAuthService
             expires: DateTime.UtcNow.AddHours(1),
             signingCredentials: credentials
         );
-        var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
         var handler = new JwtSecurityTokenHandler();
+
+        var jwt = handler.WriteToken(token);
 
         var expiryDate = handler.ReadJwtToken(jwt).ValidTo;
 
@@ -77,7 +78,8 @@ public class AuthService: IAuthService
             UpdatedDate = user.UpdatedDate  
         };
 
-        _logger.LogInformation("Logged In Successfully By user", user);
+        _logger.LogInformation("Logged In Successfully By user: {user} at {time}", user.Username, DateTime.UtcNow); 
+        
         return new LoginResponse
         {
             User = userWithoutPassword,
