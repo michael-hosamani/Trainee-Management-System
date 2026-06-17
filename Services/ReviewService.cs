@@ -37,20 +37,20 @@ public class ReviewService: IReviewService
     }
 
     // This funciton creates a new Review
-    public async Task<ReviewResponse?> CreateReview(CreateReviewRequest review)
+    public async Task<ReviewResponse> CreateReview(CreateReviewRequest review)
     {
         Submission? findSubmission = await _db.Submissions.SingleOrDefaultAsync(t => t.Id == review.SubmissionId);
         if(findSubmission == null)
         {
             _logger.LogWarning("Submission not found with {id}", review.SubmissionId);
-            return null;
+            throw new NotFoundException("Submission not found", review.SubmissionId);
         }
 
         Mentor? findMentor = await _db.Mentors.SingleOrDefaultAsync(t => t.Id == review.MentorId);
         if(findMentor == null)
         {
             _logger.LogWarning("Mentor not found with {id}", review.MentorId);
-            return null;
+            throw new NotFoundException("Mentor not found", review.MentorId);
         }
 
         Review newReview = new Review

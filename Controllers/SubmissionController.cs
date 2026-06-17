@@ -62,11 +62,7 @@ public class SubmissionsController: ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateSubmission(CreateSubmissionRequest submission)
     {
-        SubmissionResponse? submissionResponse = await _service.CreateSubmission(submission);
-        if(submissionResponse == null)
-        {
-            return BadRequest();
-        }
+        SubmissionResponse submissionResponse = await _service.CreateSubmission(submission);
 
         return Ok(submissionResponse);
     }

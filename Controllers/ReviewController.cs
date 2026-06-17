@@ -62,11 +62,7 @@ public class ReviewsController: ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateReview(CreateReviewRequest review)
     {
-        ReviewResponse? reviewResponse = await _service.CreateReview(review);
-        if(reviewResponse == null)
-        {
-            return BadRequest();
-        }
+        ReviewResponse reviewResponse = await _service.CreateReview(review);
 
         return Ok(reviewResponse);
     }

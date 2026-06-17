@@ -62,12 +62,7 @@ public class TaskAssignmentController: ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateTaskAssignment(CreateTaskAssignmentRequest taskAssignment)
     {
-        TaskAssignmentResponse? taskAssignmentResponse = await _service.CreateTaskAssignment(taskAssignment);
-
-        if(taskAssignmentResponse == null)
-        {
-            return BadRequest();
-        }
+        TaskAssignmentResponse taskAssignmentResponse = await _service.CreateTaskAssignment(taskAssignment);
 
         return Ok(taskAssignmentResponse);
     }

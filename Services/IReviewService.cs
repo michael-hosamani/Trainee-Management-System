@@ -7,5 +7,5 @@ public interface IReviewService
 {
     Task<List<Review>> GetAllReviews();
     Task<Review?> GetReviewById(int id);
-    Task<ReviewResponse?> CreateReview(CreateReviewRequest review);
+    Task<ReviewResponse> CreateReview(CreateReviewRequest review);
 }

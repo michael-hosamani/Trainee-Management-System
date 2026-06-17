@@ -44,33 +44,32 @@ public class TaskAssignmentService: ITaskAssignmentService
     }
 
     // This funciton creates a new TaskAssignment 
-    public async Task<TaskAssignmentResponse?> CreateTaskAssignment(CreateTaskAssignmentRequest taskAssignment)
+    public async Task<TaskAssignmentResponse> CreateTaskAssignment(CreateTaskAssignmentRequest taskAssignment)
     {   
         Trainee? findTrainee = await _db.Trainees.SingleOrDefaultAsync(t => t.Id == taskAssignment.TraineeId);
         if(findTrainee == null)
         {
             _logger.LogWarning("Trainee not found with {id}", taskAssignment.TraineeId);
             throw new NotFoundException("Trainee not found", taskAssignment.TraineeId);
-            // return null;
         }
 
         Mentor? findMentor = await _db.Mentors.SingleOrDefaultAsync(t => t.Id == taskAssignment.MentorId);
         if(findMentor == null)
         {
             _logger.LogWarning("Mentor not found with {id}", taskAssignment.MentorId);
-            return null;
+            throw new NotFoundException("Mentor not found", taskAssignment.MentorId);
         }
 
         LearningTask? findLearningTask = await _db.LearningTasks.SingleOrDefaultAsync(t => t.Id == taskAssignment.LearningTaskId);
         if(findLearningTask == null)
         {
             _logger.LogWarning("Learning Task not found with {id}", taskAssignment.LearningTaskId);
-            return null;
+            throw new NotFoundException("Mentor not found", taskAssignment.LearningTaskId);
         }
 
         if(taskAssignment.DueDate < taskAssignment.AssignedDate)
         {
-            return null;
+            throw new BadRequestException("Due Date cannot be before Assigned Date");
         }
 
         TaskAssignment newTaskAssignment = new TaskAssignment
@@ -95,6 +94,7 @@ public class TaskAssignmentService: ITaskAssignmentService
             AssignedDate = newTaskAssignment.AssignedDate,
             DueDate = newTaskAssignment.DueDate,
         };
+        
         _logger.LogInformation("New TaskAssignment created successfully");
         return TaskAssignmentResponse;
     }
