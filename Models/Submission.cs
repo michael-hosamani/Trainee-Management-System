@@ -15,6 +15,7 @@ public class Submission
     [JsonIgnore]
     public TaskAssignment TaskAssignment { get; set; } = null!;
     public ICollection<Review> Reviews { get; set; } = new List<Review>();
+    public ICollection<SubmissionFile> SubmissionFiles { get; set; } = new List<SubmissionFile>();
 }
 
 public enum SubmissionStatus

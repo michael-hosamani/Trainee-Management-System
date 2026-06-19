@@ -3,7 +3,7 @@ using System.Net;
 public sealed class NotFoundException : AppException
 {
     public NotFoundException(string resourceName, object key)
-        : base($"{resourceName} with ID '{key}' was not found.", HttpStatusCode.NotFound)
+        : base($"{resourceName} with ID '{key}'", HttpStatusCode.NotFound)
     {
     }
 }

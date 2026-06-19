@@ -7,16 +7,18 @@ using TraineeManagementApi.Dto;
 
 namespace TraineeManagementApi.Controllers;
 
-[Authorize(Roles = $"{nameof(Role.Mentor)}, {nameof(Role.Trainee)}")]
+// [Authorize(Roles = $"{nameof(Role.Mentor)}, {nameof(Role.Trainee)}")]
 [ApiController]
 [Route("api/submissions")]
 public class SubmissionsController: ControllerBase 
 {
     private ISubmissionService _service;
+    private IFileStorageService _fileStorageService;
 
-    public SubmissionsController(ISubmissionService service)
+    public SubmissionsController(ISubmissionService service, IFileStorageService fileStorageService)
     {
         _service = service;
+        _fileStorageService = fileStorageService;
     }
 
     // GET /api/submissions
@@ -65,5 +67,12 @@ public class SubmissionsController: ControllerBase
         SubmissionResponse submissionResponse = await _service.CreateSubmission(submission);
 
         return Ok(submissionResponse);
+    }
+
+    [HttpPost("{submissionId}/files")]
+    public async Task<ActionResult> UploadFile(int submissionId, CreateSubmissionFileRequest createSubmissionFileRequest)
+    {
+        string res = await _service.UploadFile(submissionId, createSubmissionFileRequest);
+        return Ok(res);
     }
 }

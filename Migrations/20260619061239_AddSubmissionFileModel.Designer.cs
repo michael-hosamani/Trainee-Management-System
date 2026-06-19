@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace TraineeManagementApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260619061239_AddSubmissionFileModel")]
+    partial class AddSubmissionFileModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -365,7 +368,7 @@ namespace TraineeManagementApi.Migrations
             modelBuilder.Entity("TraineeManagementApi.Models.SubmissionFile", b =>
                 {
                     b.HasOne("TraineeManagementApi.Models.Submission", "Submission")
-                        .WithMany("SubmissionFiles")
+                        .WithMany()
                         .HasForeignKey("SubmissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -415,8 +418,6 @@ namespace TraineeManagementApi.Migrations
             modelBuilder.Entity("TraineeManagementApi.Models.Submission", b =>
                 {
                     b.Navigation("Reviews");
-
-                    b.Navigation("SubmissionFiles");
                 });
 
             modelBuilder.Entity("TraineeManagementApi.Models.TaskAssignment", b =>

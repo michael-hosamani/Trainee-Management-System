@@ -15,6 +15,7 @@ public class AppDbContext : DbContext
     public DbSet<TaskAssignment> TaskAssignments { get; set; }
     public DbSet<Submission> Submissions { get; set; }
     public DbSet<Review> Reviews { get; set; }
+    public DbSet<SubmissionFile> SubmissionFiles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
