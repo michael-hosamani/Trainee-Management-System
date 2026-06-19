@@ -1,3 +1,4 @@
+using TraineeManagementApi.Dto;
 using TraineeManagementApi.Models;
 
 namespace TraineeManagementApi.Services;
@@ -14,7 +15,7 @@ public class SubmissionFileService: ISubmissionFileService
         _logger = logger;
         _fileStorageService = fileStorageService;
     }
-    public async Task<SubmissionFile> DownloadFile(int id)
+    public async Task<DownloadFileType> DownloadFile(int id)
     {
         SubmissionFile? submissionFile = await _db.SubmissionFiles.FindAsync(id);
         if (submissionFile == null)
@@ -24,7 +25,7 @@ public class SubmissionFileService: ISubmissionFileService
         }
 
         _logger.LogInformation("Submission File created successfully with {id}", id);
-        return submissionFile;
+        return _fileStorageService.OpenReadAsync(submissionFile);
     }
 
     public async Task<bool> DeleteFile(int id)

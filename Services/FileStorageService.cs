@@ -1,4 +1,7 @@
 
+using TraineeManagementApi.Dto;
+using TraineeManagementApi.Models;
+
 namespace TraineeManagementApi.Services;
 
 public class FileStorageService:IFileStorageService
@@ -37,6 +40,16 @@ public class FileStorageService:IFileStorageService
         }
  
         return filePath;
+    }
+
+    public DownloadFileType OpenReadAsync(SubmissionFile file)
+    {
+        var net = new System.Net.WebClient();
+        var data = net.DownloadData(file.GeneratedStorageName);
+        var content = new System.IO.MemoryStream(data);
+        var contentType = file.ContentType;
+        var fileName = file.OriginalFileName;
+        return new DownloadFileType{Bytes = content, FileName = fileName, ContentType = contentType};
     }
 
     public bool ExistsAsync(string filePath)

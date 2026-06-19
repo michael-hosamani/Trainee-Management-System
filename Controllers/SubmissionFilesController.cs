@@ -1,5 +1,6 @@
 
 using Microsoft.AspNetCore.Mvc;
+using TraineeManagementApi.Dto;
 using TraineeManagementApi.Models;
 using TraineeManagementApi.Services;
 
@@ -18,13 +19,9 @@ public class SubmissionFilesController: ControllerBase
     // GET /api/submission-files/{id}/download route
     [HttpGet("{id}/download")]
     public async Task<ActionResult> Get(int id){
-        SubmissionFile file = await _service.DownloadFile(id);
-        var net = new System.Net.WebClient();
-        var data = net.DownloadData(file.GeneratedStorageName);
-        var content = new System.IO.MemoryStream(data);
-        var contentType = file.ContentType;
-        var fileName = file.OriginalFileName;
-        return File(content, contentType, fileName);
+        DownloadFileType file = await _service.DownloadFile(id);
+
+        return File(file.Bytes, file.ContentType, file.FileName);
     }
 
     // GET /api/submission-files/{id}/download route
