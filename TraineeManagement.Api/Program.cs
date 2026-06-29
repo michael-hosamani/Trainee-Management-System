@@ -21,8 +21,13 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using RabbitMQ.Client;
 using System.Text.Json;
 using Microsoft.AspNetCore.Connections;
+using DotNetEnv;
+
+DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration.AddEnvironmentVariables(); 
 
 builder.Services.AddCors(options =>
 {

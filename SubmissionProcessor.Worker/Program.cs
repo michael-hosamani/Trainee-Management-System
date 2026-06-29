@@ -7,9 +7,14 @@ using System.Web;
 using System.Net;
 using System.Net.Http;
 using SubmissionProcessor.Worker.Services;
+using DotNetEnv;
+
+// Load the .env file
+DotNetEnv.Env.Load();
 
 var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddHostedService<SubmissionConsumer>();
+builder.Configuration.AddEnvironmentVariables(); 
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
  

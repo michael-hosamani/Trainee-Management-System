@@ -19,6 +19,7 @@ RUN cat > nuget.config <<EOF
 EOF
 
 COPY ./TraineeDirectory.Api ./TraineeDirectory.Api/
+COPY ./Shared ./Shared
 WORKDIR /AppCode/TraineeDirectory.Api
 
 # add nuget config with credentials

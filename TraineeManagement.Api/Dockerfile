@@ -21,11 +21,11 @@ EOF
 COPY ./TraineeManagement.Api/ ./TraineeManagement.Api/
 COPY ./Shared/ ./Shared/
 
-WORKDIR /AppCode/TraineeManagement.Api
 
 # add nuget config with credentials
 RUN dotnet nuget update source ${NUGET_REPO_NAME} -u "aws" -p "${CODEARTIFACT_AUTH_TOKEN}" --store-password-in-clear-text --configfile /AppCode/nuget.config
 
+WORKDIR /AppCode/TraineeManagement.Api
 RUN dotnet restore --configfile /AppCode/nuget.config
 RUN dotnet publish -c Release -o out --no-restore
 
@@ -35,4 +35,4 @@ FROM docker-registry-002.zeuslearning.com/zeuslearning/dotnet/aspnet:10.0-alpine
 WORKDIR /App
 COPY --from=build-env /AppCode/TraineeManagement.Api/out .
 EXPOSE 8080
-ENTRYPOINT ["dotnet", "TraineeManagement.Api.dll"]
+ENTRYPOINT ["dotnet", "TraineeManagementApi.dll"]
