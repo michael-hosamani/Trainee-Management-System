@@ -18,8 +18,8 @@ RUN cat > nuget.config <<EOF
 </configuration>
 EOF
 
-COPY ./TrainingDirectory.Api ./TrainingDirectory.Api/
-WORKDIR /AppCode/TrainingDirectory.Api
+COPY ./TraineeDirectory.Api ./TraineeDirectory.Api/
+WORKDIR /AppCode/TraineeDirectory.Api
 
 # add nuget config with credentials
 RUN dotnet nuget update source ${NUGET_REPO_NAME} -u "aws" -p "${CODEARTIFACT_AUTH_TOKEN}" --store-password-in-clear-text --configfile /AppCode/nuget.config
@@ -31,6 +31,6 @@ RUN dotnet publish -c Release -o out --no-restore
 
 FROM docker-registry-002.zeuslearning.com/zeuslearning/dotnet/aspnet:10.0-alpine AS runtime
 WORKDIR /App
-COPY --from=build-env /AppCode/TrainingDirectory.Api/out .
+COPY --from=build-env /AppCode/TraineeDirectory.Api/out .
 EXPOSE 8080
-ENTRYPOINT ["dotnet", "TrainingDirectory.Api.dll"]
+ENTRYPOINT ["dotnet", "TraineeDirectory.Api.dll"]

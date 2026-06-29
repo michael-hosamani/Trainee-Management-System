@@ -19,7 +19,7 @@ RUN cat > nuget.config <<EOF
 EOF
 
 COPY ./TraineeManagement.Api/ ./TraineeManagement.Api/
-COPY ./SharedFolder/ ./SharedFolder/
+COPY ./Shared/ ./Shared/
 
 WORKDIR /AppCode/TraineeManagement.Api
 

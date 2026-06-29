@@ -19,7 +19,7 @@ RUN cat > nuget.config <<EOF
 EOF
 
 COPY ./SubmissionProcessor.Worker ./SubmissionProcessor.Worker/
-COPY ./SharedFolder ./SharedFolder/
+COPY ./Shared ./Shared/
 
 WORKDIR /AppCode/SubmissionProcessor.Worker
 
