@@ -24,7 +24,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Registration
 builder.Services.AddHttpClient<TraineeDirectoryClient>("TraineeDirectory.Api", client =>
     {
-        client.BaseAddress = new Uri("http://localhost:5190/");
+        client.BaseAddress = new Uri("http://traineedir-api-container:8080");
     }).ConfigurePrimaryHttpMessageHandler(() =>
     {
         return new SocketsHttpHandler()

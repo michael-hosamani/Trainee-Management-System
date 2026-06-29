@@ -4,6 +4,9 @@ Trainee Management System
 ## Technology Used
 Asp.net core, MySql, Redis, RabbitMQ & Docker
 
+## Workflow Diagram
+
+
 ## Backend setup stpes
 1. Navigate to the project folder
   `cd path/to/your/project`
