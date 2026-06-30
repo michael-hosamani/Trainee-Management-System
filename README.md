@@ -37,6 +37,8 @@ Asp.net core, MySql, Redis, RabbitMQ & Docker
         dotnet run
       ```
 
+
+
   ### SubmissionProcessor.Worker
   1. Navigate to the SubmissionProcessor.Worker folder    
     From the root of the project run:   
@@ -60,12 +62,7 @@ Asp.net core, MySql, Redis, RabbitMQ & Docker
         dotnet build
       ```
 
-  5. Run database migrations  
-      ```javascript 
-        dotnet ef database update
-      ```
-
-  6. Run the application  
+  5. Run the application  
       ```javascript 
         dotnet run
       ```
@@ -98,7 +95,7 @@ Once ran successfully, the API and the database are in sync. We can test the con
     ConnectionStrings__Redis="Your-Redis-Connection-String"
   ```  
 
-## Rabitmq setup
+## RabbitMQ setup steps
 1. Ensure a rabbitMQ instance is up and running
 
 2. Add RabbitMQ username in the .env file of TraineeManagement.Api and SubmissionProcessor.Worker  
@@ -121,17 +118,20 @@ Once ran successfully, the API and the database are in sync. We can test the con
 ```
 
 ## JWT usage instructions
-1. Initialise User Secrets
-  `dotnet user-secrets init`
+1. Generate and use a random string as your Jwt Key
 
-2. Add Jwt Key to secrets
-  `dotnet user-secrets set "Jwt:Key" "Your-Jwt-Key"`
+2. Add Jwt Key to .env file in the TraineeManagement.Api folder  
+  ``` javascript
+    Jwt__Key="Your-Jwt-Key"
+  ```
 
-3. Run the following command to view you secret
-  `dotnet user-secrets list`
+## Setup using Docker
+1. Ensure the .env files in TraineeManagement.Api and SubmissionProcessor.Worker are appropriately filled
 
-4. Run the following command to make sure there are no errors.
-  `dotnet build`
+2. Run the following command in the root of the project directory to start the application using docker:  
+  ``` javascript
+    docker compose up --build -d
+  ```
 
 ## API List
 - GET /api/health
