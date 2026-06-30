@@ -41,5 +41,15 @@
     "/home/michael02/.nuget/packages/system.composition.runtime/7.0.0/system.composition.runtime.7.0.0.nupkg.sha512",
     "/home/michael02/.nuget/packages/system.composition.typedparts/7.0.0/system.composition.typedparts.7.0.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1900",
+      "level": "Warning",
+      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://zeuslearning-824100177805.d.codeartifact.ap-south-1.amazonaws.com/nuget/training-nuget-store/v3/index.json.",
+      "projectPath": "/mnt/c/Assignments/TraineeManagementSystem/Shared/Shared.csproj",
+      "warningLevel": 1,
+      "filePath": "/mnt/c/Assignments/TraineeManagementSystem/Shared/Shared.csproj",
+      "targetGraphs": []
+    }
+  ]
 }

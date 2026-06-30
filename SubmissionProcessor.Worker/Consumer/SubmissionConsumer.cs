@@ -9,6 +9,7 @@ using System.Net.Http.Json;
 using System.Security.Authentication;
 using SubmissionProcessor.Worker.Services;
 using Shared.Dto;
+using System.Threading.Tasks.Dataflow;
 
 namespace SubmissionProcessor.Worker.Consumer;
 public class SubmissionConsumer : BackgroundService
@@ -135,17 +136,23 @@ public class SubmissionConsumer : BackgroundService
                 }
 
                 UpdateStatus(res, ProcessingJobStatus.Processing);
-                Console.WriteLine("Started processing");
+                _logger.LogInformation("Started processing job with Id: {id}", id);
 
                 //simulate job processing 
                 SubmissionFile? file = await db.SubmissionFiles.FindAsync(res.FileId);
-                if (file == null)
+                if(!file)
                 {
+                    _logger.LogWarning("File not found with Id: {id}", res.FileId);
                     throw new Exception("File not found");
                 }
                 _logger.LogInformation("Checksum from the file: {checksum}", file.Checksum);
 
                 TestResponseDto? response = await _client.GetTraineeByIdASync(res.CorrelationId, cancellationToken);
+                if(response == null)
+                {
+                    _logger.LogWarning("Failed to fetch response from internal service with correlationId: {id}", res.CorrelationId);
+                    throw new Exception("Failed to fetch response from internal service");
+                }
 
                 _logger.LogInformation("CorrelationId for internal http server's response: {id}", response.CorrelationId);
 
@@ -158,7 +165,7 @@ public class SubmissionConsumer : BackgroundService
             }
             catch(Exception ex)
             {
-                Console.WriteLine("in catch block" + ex.Message);
+                _logger.LogWarning("Exception occured while processing job: {exception}", ex.Message);
                 using var scope = _serviceScopeFactory.CreateScope();
                 AppDbContext db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
                 
@@ -190,13 +197,13 @@ public class SubmissionConsumer : BackgroundService
         using var scope = _serviceScopeFactory.CreateScope();
         AppDbContext db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         
-        Guid CorrelationId = payload.CorrelationId;
+        Guid correlationId = payload.CorrelationId;
         
-        ProcessingJob? job = await db.ProcessingJobs.SingleOrDefaultAsync(p => p.CorrelationId == CorrelationId);
+        ProcessingJob? job = await db.ProcessingJobs.SingleOrDefaultAsync(p => p.CorrelationId == correlationId);
 
         if(job == null)
         {
-            Console.WriteLine("Job not found");
+            _logger.LogWarning("Job not found with Id: ", correlationId);
             return;
         }
 

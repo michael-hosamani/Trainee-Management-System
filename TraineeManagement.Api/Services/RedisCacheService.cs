@@ -30,7 +30,7 @@ public class RedisCacheService: IRedisCacheService
         }
         catch (Exception ex)
         {
-            _logger.LogWarning("Error occured while fetching value for key: {key} with Excpetion: {ex}", key, ex);
+            _logger.LogWarning("Error occured while fetching value for key: {key} with Excpetion: {ex}", key, ex.Message);
             return default;
         }
     }
@@ -44,7 +44,7 @@ public class RedisCacheService: IRedisCacheService
         }
         catch(Exception ex)
         {
-            _logger.LogWarning("Error occured while setting value for key: {key} with Excpetion: {ex}", key, ex);
+            _logger.LogWarning("Error occured while setting value for key: {key} with Excpetion: {ex}", key, ex.Message);
         }
     }
 

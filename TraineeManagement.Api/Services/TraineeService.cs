@@ -31,7 +31,7 @@ public class TraineeService(ILogger<TraineeService> logger, AppDbContext db, IRe
         {
             return data;
         }
-
+        
         var result = await _db.Trainees
                                 .Include(t => t.TaskAssignments)
                                         .ThenInclude(t => t.Submissions)
@@ -109,7 +109,6 @@ public class TraineeService(ILogger<TraineeService> logger, AppDbContext db, IRe
 
         await _db.SaveChangesAsync();
         await _redisCacheService.RemoveAsync($"trainee:{id}", cancellationToken);
-        // _redisCacheService.SetAsync($"trainee:{id}", findTrainee, TimeSpan.FromMinutes(30), cancellationToken);
 
         _logger.LogInformation("Trainee updated successfully");
 
