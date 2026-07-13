@@ -38,6 +38,26 @@ public class AppDbContext : DbContext
             .WithOne(e => e.LearningTask)
             .HasForeignKey(e => e.LearningTaskId)
             .IsRequired();
+
+        modelBuilder.Entity<Submission>()
+            .HasOne(s => s.TaskAssignment)
+            .WithMany(ta => ta.Submissions)
+            .HasForeignKey(s => s.TaskAssignmentId);
+
+        modelBuilder.Entity<Review>()
+            .HasOne(r => r.Submission)
+            .WithMany(s => s.Reviews)
+            .HasForeignKey(r => r.SubmissionId);
+
+        modelBuilder.Entity<Review>()
+            .HasOne(r => r.Mentor)
+            .WithMany(s => s.Reviews)
+            .HasForeignKey(r => r.MentorId);
+
+        modelBuilder.Entity<SubmissionFile>()
+            .HasOne(sf => sf.Submission)
+            .WithMany(s => s.SubmissionFiles)
+            .HasForeignKey(sf => sf.SubmissionId);
     }
 }
 
