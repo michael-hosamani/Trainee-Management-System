@@ -126,7 +126,7 @@ public class SubmissionService: ISubmissionService
         };
         ProcessingJob processingJob = new ()
         {
-            status = ProcessingJobStatus.Queued,
+            Status = ProcessingJobStatus.Queued,
             Attempts = 0,
             ErrorSummary = "",
             CorrelationId = submissionProcessingRequested.CorrelationId  

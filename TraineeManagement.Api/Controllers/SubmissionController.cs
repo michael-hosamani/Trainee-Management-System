@@ -7,7 +7,7 @@ using TraineeManagement.Api.Dto;
 
 namespace TraineeManagement.Api.Controllers;
 
-// [Authorize(Roles = $"{nameof(Role.Mentor)}, {nameof(Role.Trainee)}")]
+[Authorize(Roles = $"{nameof(Role.Mentor)}, {nameof(Role.Trainee)}")]
 [ApiController]
 [Route("api/submissions")]
 public class SubmissionsController: ControllerBase 

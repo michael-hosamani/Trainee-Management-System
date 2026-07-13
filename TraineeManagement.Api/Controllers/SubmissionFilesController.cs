@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using TraineeManagement.Api.Dto;
 using Shared.Models;
 using TraineeManagement.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TraineeManagement.Api.Controllers;
 
+[Authorize(Roles = $"{nameof(Role.Mentor)}, {nameof(Role.Trainee)}")]
 [ApiController]
 [Route("api/submission-files")]
 public class SubmissionFilesController: ControllerBase

@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Shared.Models;
 using Shared.Data;
+using TraineeManagement.Api.Helpers;
 
 namespace TraineeManagement.Api.Services;
 
@@ -16,14 +17,15 @@ public class AuthService: IAuthService
     private readonly IConfiguration _configuration;
     private readonly ILogger<AuthService> _logger;
     private readonly ITokenService _TokenService;
-   
+    private readonly Hasher _hasher;
 
-    public AuthService(AppDbContext db, IConfiguration configuration, ILogger<AuthService> logger, ITokenService TokenService)
+    public AuthService(AppDbContext db, IConfiguration configuration, ILogger<AuthService> logger, ITokenService TokenService, Hasher hasher)
     {   
         _db = db;
         _configuration = configuration;
         _logger = logger;
         _TokenService = TokenService;
+        _hasher = hasher;
     }
 
     public async Task<LoginResponse?> UserLogin(LoginRequest loginRequest)
@@ -53,7 +55,11 @@ public class AuthService: IAuthService
         var accessToken = _TokenService.GenerateToken(user, AuthTokenType.AccessToken);
         var refreshToken = _TokenService.GenerateToken(user, AuthTokenType.RefreshToken);
 
-        user.RefreshToken = refreshToken.jwt;
+        string hashedRefreshToken = _hasher.ComputeSha256Hash(refreshToken.jwt);
+
+        _logger.LogInformation("hashed refresh token: {hashedRefreshToken}", hashedRefreshToken);
+
+        user.RefreshToken = hashedRefreshToken;
         user.RefreshTokenExpiry = refreshToken.expiryDate;
 
         await _db.SaveChangesAsync(); 
@@ -66,7 +72,7 @@ public class AuthService: IAuthService
             Role = user.Role,
             CreatedDate = user.CreatedDate,
             UpdatedDate = user.UpdatedDate,
-            RefreshToken = user.RefreshToken,
+            RefreshToken = refreshToken.jwt,
             RefreshTokenExpiry = user.RefreshTokenExpiry
         };
 
@@ -108,7 +114,9 @@ public class AuthService: IAuthService
             return null;
         }
 
-        if(refreshTokenDto.RefreshToken != user.RefreshToken)
+        string hashedToken = _hasher.ComputeSha256Hash(refreshTokenDto.RefreshToken);
+        _logger.LogInformation("hashedToken: {hashedToken}", hashedToken);
+        if(hashedToken != user.RefreshToken)
         {
             _logger.LogError("Refresh token is invalid");
             return null;

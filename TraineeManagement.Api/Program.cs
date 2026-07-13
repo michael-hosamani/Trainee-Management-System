@@ -22,6 +22,7 @@ using RabbitMQ.Client;
 using System.Text.Json;
 using Microsoft.AspNetCore.Connections;
 using DotNetEnv;
+using TraineeManagement.Api.Helpers;
 
 DotNetEnv.Env.Load();
 
@@ -91,6 +92,7 @@ builder.Services.AddScoped<ISubmissionFileService, SubmissionFileService>();
 builder.Services.AddScoped<IRedisCacheService, RedisCacheService>();
 builder.Services.AddScoped<IRabbitMQService, RabbitMQService>();
 builder.Services.AddScoped<IProcessingJobService, ProcessingJobService>();
+builder.Services.AddScoped<Hasher>();
 
 builder.Services
     .AddAuthentication(options =>

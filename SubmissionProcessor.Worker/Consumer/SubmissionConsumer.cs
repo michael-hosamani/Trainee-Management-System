@@ -122,7 +122,7 @@ public class SubmissionConsumer : BackgroundService
                     return;
                 }
                 // return if job already completed
-                if(job.status == ProcessingJobStatus.Completed)
+                if(job.Status == ProcessingJobStatus.Completed)
                 {
                     await _channel.BasicAckAsync(ea.DeliveryTag, multiple: false);
                     _logger.LogWarning("Job Already Processed: {id}", job.Id);
@@ -211,19 +211,19 @@ public class SubmissionConsumer : BackgroundService
         {
             _logger.LogInformation("Processing job: {id}", job.Id);
 
-            job.status = status;
+            job.Status = status;
             job.Attempts++;
             job.StartedAt = DateTime.UtcNow;
         }
         if (status == ProcessingJobStatus.Completed)
         {
-            job.status = status;
+            job.Status = status;
             job.CompletedAt = DateTime.UtcNow;
             _logger.LogInformation("Completed job: {id} ", job.Id);
         }
         if (status == ProcessingJobStatus.Failed)
         {
-            job.status = status;
+            job.Status = status;
             job.ErrorSummary = ErrorMessage;
             _logger.LogInformation("Failed job: {id}", job.Id);
         }

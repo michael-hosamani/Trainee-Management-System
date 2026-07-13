@@ -14,7 +14,9 @@ public class TaskAssignment
     public required DateTime AssignedDate { get; set; }
     public required DateTime DueDate { get; set; }
     public required TaskAssignmentStatus Status { get; set; }
-    public string? Remarks { get; set; }
+
+    [MaxLength(300)]
+    public string? Remarks { get; set; } = "";
     
     [JsonIgnore]
     public Trainee Trainee { get; set; } = null!;
