@@ -171,14 +171,14 @@ using(var scope = app.Services.CreateAsyncScope())
    {
       var admin = new User
       {
-         Username = "michael",
-         Email = "michael@gmail.com",
+         Username = builder.Configuration["ADMIN:USERNAME"],
+         Email = builder.Configuration["ADMIN:EMAIL"],
          PasswordHash = "",
          RefreshToken = "",
          Role = Role.Admin
       };
       var hasher = new PasswordHasher<User>();
-      string hashedPassword = hasher.HashPassword(admin, "pass");
+      string hashedPassword = hasher.HashPassword(admin, builder.Configuration["ADMIN:PASSWORD"]);
       admin.PasswordHash = hashedPassword;
       Console.WriteLine("Seeding user: " + admin);
       db.Users.Add(admin);
