@@ -129,7 +129,8 @@ public class AuthService: IAuthService
 
         var newAccessToken = _TokenService.GenerateToken(user, AuthTokenType.AccessToken);
         var newRefreshToken = _TokenService.GenerateToken(user, AuthTokenType.RefreshToken);
-        user.RefreshToken = newRefreshToken.jwt;
+
+        user.RefreshToken = _hasher.ComputeSha256Hash(newRefreshToken.jwt);
         user.RefreshTokenExpiry = newRefreshToken.expiryDate;
 
         await _db.SaveChangesAsync(); 
@@ -142,7 +143,7 @@ public class AuthService: IAuthService
             Role = user.Role,
             CreatedDate = user.CreatedDate,
             UpdatedDate = user.UpdatedDate,
-            RefreshToken = user.RefreshToken,
+            RefreshToken = newRefreshToken.jwt,
             RefreshTokenExpiry = user.RefreshTokenExpiry
         };
         
