@@ -35,7 +35,7 @@ builder.Services.AddCors(options =>
    options.AddPolicy("AllowSpecificOrigin", 
       policy =>
       {
-         policy.WithOrigins("http://localhost:5173")
+         policy.WithOrigins(builder.Configuration["CLIENT:URL"])
                .AllowAnyHeader()
                .AllowAnyMethod();
       }
@@ -131,11 +131,11 @@ builder.Services.AddHealthChecks()
       {
             var factory = new ConnectionFactory
             {
-               HostName = "localhost",
-               UserName = "admin",
-               Password = "rabbitmq_password",
-               Port = 5672,
-               VirtualHost = "/"
+               HostName = builder.Configuration["RabbitMQ:HostName"],
+               UserName = builder.Configuration["RabbitMQ:UserName"],
+               Password = builder.Configuration["RabbitMQ:Password"],
+               Port = int.Parse(builder.Configuration["RabbitMQ:Port"]),
+               VirtualHost = builder.Configuration["RabbitMQ:VirtualHost"]
             };
             return await factory.CreateConnectionAsync();
       },
@@ -145,7 +145,7 @@ builder.Services.AddHealthChecks()
       tags: new[] { "mq", "rabbit" }
     )
     .AddUrlGroup(
-        uri: new Uri("http://localhost:5190/api/trainees"), // URL to check
+        uri: new Uri($"{builder.Configuration["API:URL"]}/api/trainees"), // URL to check
         name: "TraineeDirectory.Api",
         failureStatus: HealthStatus.Unhealthy,
         timeout: TimeSpan.FromSeconds(5)
@@ -225,21 +225,5 @@ app.UseExceptionHandler();
 
 app.UseOpenApi();
 app.UseSwaggerUi();
-
-// app.UseExceptionHandler(options =>
-// {
-//    options.Run(async context =>
-//    {
-//       context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-//       context.Response.ContentType = "application/json";
-
-//       var exceptionFeature = context.Features.Get<IExceptionHandlerFeature>();
-//       if (exceptionFeature is not null)
-//       {
-//          var error = new { message = "An unexpected error occurred" };
-//          await context.Response.WriteAsJsonAsync(error);
-//       }
-//    });
-// });
 
 app.Run();

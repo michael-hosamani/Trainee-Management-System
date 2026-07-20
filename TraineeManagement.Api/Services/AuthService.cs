@@ -76,7 +76,7 @@ public class AuthService: IAuthService
             RefreshTokenExpiry = user.RefreshTokenExpiry
         };
 
-        _logger.LogInformation("Logged In Successfully By user: {user} at {time}", user.Username, DateTime.UtcNow); 
+        _logger.LogInformation("Logged In Successfully By user: {user} at {time}", user.Id, DateTime.UtcNow); 
         
         return new LoginResponse
         {
@@ -115,7 +115,6 @@ public class AuthService: IAuthService
         }
 
         string hashedToken = _hasher.ComputeSha256Hash(refreshTokenDto.RefreshToken);
-        _logger.LogInformation("hashedToken: {hashedToken}", hashedToken);
         if(hashedToken != user.RefreshToken)
         {
             _logger.LogError("Refresh token is invalid");
